@@ -1,0 +1,40 @@
+# === Virtual Environment ===
+project_ava_env/
+venv/
+env/
+.venv/
+
+# === Python Cache ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+prac.py
+
+# === Jupyter Notebooks ===
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+
+# === Large Data & Model Files ===
+datasets/
+models/
+results/
+*.pkl
+*.h5
+*.joblib
+*.parquet
+*.csv
+*.tsv
+
+# === Secrets & Sensitive Info ===
+.env
+*.key
+*.pem
+password_keeper.md   # <-- Your file: only if it contains live secrets; remove this line if it's just documentation
+
+# === OS Files ===
+.DS_Store
+Thumbs.db
+Desktop.ini
