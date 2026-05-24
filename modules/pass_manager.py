@@ -7,7 +7,7 @@ class PassMan:
         self.password = password
 
 
-    def _save_details(self, username, password):
+    def _to_csv(self, username, password):
         detail_dict = {
             'username': username,
             'password': password
@@ -18,7 +18,8 @@ class PassMan:
         credentials_df.to_csv('credentials.csv', index=False)
 
 
-username_input = input("USERNAME: ")
-password_input = input("PASSWORD: ")
-pass_man = PassMan(username_input, password_input)
-pass_man._save_details(username_input, password_input)
+if __name__ == "__main__":
+    username_input = input("USERNAME: ")
+    password_input = input("PASSWORD: ")
+    pass_man = PassMan(username_input, password_input)
+    pass_man._to_csv(username_input, password_input)
