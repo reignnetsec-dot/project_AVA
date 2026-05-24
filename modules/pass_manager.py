@@ -14,26 +14,66 @@ class PassMan:
         upper_case = chars['upper_case']
         digits = chars['digits']
         punctuation = chars['punctuation']
+        all_chars = lower_case + upper_case + digits + punctuation
 
+        password = []
         if strength == 1:
             # weak password: random lowercase + digits
-            password = []
             for _ in range(5):
                 lower_case_char = random.choice(lower_case)
                 password.append(lower_case_char)
             for _ in range(5):
                 digit = random.choice(digits)
                 password.append(digit)
-            return ''.join(password)
         
         elif strength == 2:
             # mid password: random lowercase + uppercase + digits
-            ...
+
+            sequence = [1, 2, 3, 4]
+            for _ in range(3):
+                random_sequence = random.choice(sequence)
+                for _ in range(random_sequence):
+                    lower_case_char = random.choice(lower_case)
+                    password.append(lower_case_char)
+            
+                random_sequence = random.choice(sequence)
+                for _ in range(random_sequence):
+                    digit = random.choice(digits)
+                    password.append(digit)
+
+                random_sequence = random.choice(sequence)
+                for _ in range(random_sequence):
+                    upper_case_char = random.choice(upper_case)
+                    password.append(upper_case_char)
+
         elif strength == 3:
             # strong password: random lowercase + uppsercase + digits + symbols
-            ...
-        else:
-            ...
+
+            sequence = [1, 2, 3, 4, 5, 1, 2]
+            for _ in range(3):
+                random_sequence = random.choice(sequence)
+                for _ in range(random_sequence):
+                    lower_case_char = random.choice(lower_case)
+                    password.append(lower_case_char)
+            
+                random_sequence = random.choice(sequence)
+                for _ in range(random_sequence):
+                    digit = random.choice(digits)
+                    password.append(digit)
+
+                random_sequence = random.choice(sequence)
+                for _ in range(random_sequence):
+                    upper_case_char = random.choice(upper_case)
+                    password.append(upper_case_char)
+
+            sequence = sequence[0:1]
+            random_sequence = random.choice(sequence)
+            for _ in range(random_sequence):
+                punctuation = random.choice(punctuation)
+                password.append(punctuation)
+
+        return ''.join(password)
+        
 
 
     def _to_csv(self, username, password):
@@ -69,4 +109,4 @@ if __name__ == "__main__":
                "'", '"', ',', '<', '.', '>', '/', '?']
             }
 
-    print(pass_man._generate_password(1, chars))
+    print(pass_man._generate_password(3, chars))
