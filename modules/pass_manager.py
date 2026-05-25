@@ -8,7 +8,8 @@ class PassMan:
         # self.password = password
         pass
 
-
+    
+    # generate password
     def _generate_password(self, strength: int, chars: dict):
         lower_case = chars['lower_case']
         upper_case = chars['upper_case']
@@ -75,19 +76,24 @@ class PassMan:
         return ''.join(password)
         
 
-
+    # save generated password
+    # 
     def _to_csv(self, username, password):
-        detail_dict = {
+        details_dict = {
             'username': username,
             'password': password
         }
-        new_row = pd.DataFrame([detail_dict])
+
+        new_row = pd.DataFrame([details_dict])
         existing = pd.read_csv('credentials.csv')
         credentials_df = pd.concat([existing, new_row], ignore_index=True)
         credentials_df.to_csv('credentials.csv', index=False)
 
 
 if __name__ == "__main__":
+    username = input("username: ")
+    password = input("password: ")
+    
     
     pass_man = PassMan()
 
@@ -109,4 +115,13 @@ if __name__ == "__main__":
                "'", '"', ',', '<', '.', '>', '/', '?']
             }
 
-    print(pass_man._generate_password(3, chars))
+    if username is not None and password is not None:
+        pass_man._to_csv(username, password)
+    elif username != "" and not password:
+        strength = input("Strength of password (1, 2, 3): ")
+        if not strength:
+            strength = 1
+        generated_password = pass_man._generate_password(strength, chars)
+        print(f"Strength {strength} password generated: {generated_password}")
+    elif username == False and password == True:
+        print(f"Please enter username.")
