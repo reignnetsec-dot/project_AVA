@@ -1,11 +1,10 @@
 import pandas as pd
 import random
+import time
 
 
 class PassMan:
     def __init__(self):
-        # self.username = username
-        # self.password = password
         pass
 
     
@@ -78,12 +77,12 @@ class PassMan:
 
     # save generated password
     # 
-    def _to_csv(self, username, password):
+    def _to_csv(self,description, username, password):
         details_dict = {
+            'description': description,
             'username': username,
             'password': password
         }
-
         new_row = pd.DataFrame([details_dict])
         existing = pd.read_csv('credentials.csv')
         credentials_df = pd.concat([existing, new_row], ignore_index=True)
@@ -91,12 +90,6 @@ class PassMan:
 
 
 if __name__ == "__main__":
-    username = input("username: ")
-    password = input("password: ")
-    
-    
-    pass_man = PassMan()
-
     chars = {
             # Lowercase letters
             'lower_case': ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
@@ -112,16 +105,30 @@ if __name__ == "__main__":
             # Punctuation & symbols (the 32 printable symbols on US QWERTY)
             'punctuation': ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')',
                '-', '_', '=', '+', '[', ']', '{', '}', '\\', '|', ';', ':',
-               "'", '"', ',', '<', '.', '>', '/', '?']
-            }
-
-    if username is not None and password is not None:
-        pass_man._to_csv(username, password)
-    elif username != "" and not password:
-        strength = input("Strength of password (1, 2, 3): ")
-        if not strength:
+               "'", '"', ',', '<', '.', '>', '/', '?']}
+    pass_man = PassMan()
+    print(f"Generate new password, Save existing credentials")
+    prompt = input("What can I do for you:\n").lower().strip()
+    if prompt == "generate new password":
+        strength = input("Password strength (1, 2, 3):\n")
+        if strength == "":
             strength = 1
-        generated_password = pass_man._generate_password(strength, chars)
-        print(f"Strength {strength} password generated: {generated_password}")
-    elif username == False and password == True:
-        print(f"Please enter username.")
+        print(f"Generating password of strength {strength}...")
+        # time.sleep(1)
+        generated_password = pass_man._generate_password(int
+        (strength), chars)
+        print(f"Generated password: {generated_password}")
+        prompt_save_password = input("Do you want to save the generated password (y) (n): ")
+        if prompt_save_password == "y":
+            credentials_description = input("Description:\n")
+            username = input("Username: ")
+            pass_man._to_csv(credentials_description, username, generated_password)
+        elif prompt_save_password == "n":
+            print("Exiting...")
+    elif prompt == "save credentials":
+        credentials_description = input("Description:\n")
+        username = input("Username: ")
+        password = input("Password: ")
+        pass_man._to_csv(credentials_description, username, password)
+        print("Credentials saved")
+
