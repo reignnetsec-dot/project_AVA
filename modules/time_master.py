@@ -1,9 +1,8 @@
-import calendar
+from datetime import datetime
 
 
-
-
-c = calendar.Calendar(firstweekday=0)
-for day in c.itermonthdays(2026, 5):
-    if day != 0:
-        print(day)
+# Get current date and time
+now = datetime.now()
+# format as "YYYY/MM/DD HH:MM"
+formatted_date = now.strftime("%Y/%m/%d")
+formatted_time = now.strftime("%H:%M")

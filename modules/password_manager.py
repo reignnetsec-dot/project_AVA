@@ -1,9 +1,9 @@
 import pandas as pd
 import random
-import time
+from time_master import formatted_date, formatted_time
 
 
-class PassMan:
+class PasswordManager:
     def __init__(self):
         pass
 
@@ -28,19 +28,16 @@ class PassMan:
         
         elif strength == 2:
             # mid password: random lowercase + uppercase + digits
-
             sequence = [1, 2, 3, 4]
             for _ in range(3):
                 random_sequence = random.choice(sequence)
                 for _ in range(random_sequence):
                     lower_case_char = random.choice(lower_case)
                     password.append(lower_case_char)
-            
                 random_sequence = random.choice(sequence)
                 for _ in range(random_sequence):
                     digit = random.choice(digits)
                     password.append(digit)
-
                 random_sequence = random.choice(sequence)
                 for _ in range(random_sequence):
                     upper_case_char = random.choice(upper_case)
@@ -48,19 +45,16 @@ class PassMan:
 
         elif strength == 3:
             # strong password: random lowercase + uppsercase + digits + symbols
-
             sequence = [1, 2, 3, 4, 5, 1, 2]
             for _ in range(3):
                 random_sequence = random.choice(sequence)
                 for _ in range(random_sequence):
                     lower_case_char = random.choice(lower_case)
                     password.append(lower_case_char)
-            
                 random_sequence = random.choice(sequence)
                 for _ in range(random_sequence):
                     digit = random.choice(digits)
                     password.append(digit)
-
                 random_sequence = random.choice(sequence)
                 for _ in range(random_sequence):
                     upper_case_char = random.choice(upper_case)
@@ -71,14 +65,15 @@ class PassMan:
             for _ in range(random_sequence):
                 punctuation = random.choice(punctuation)
                 password.append(punctuation)
-
         return ''.join(password)
         
 
     # save generated password
     # 
-    def _to_csv(self,description, username, password):
+    def _to_csv(self,date, time, description, username, password):
         details_dict = {
+            'date': date,
+            'time': time,
             'description': description,
             'username': username,
             'password': password
@@ -89,8 +84,7 @@ class PassMan:
         credentials_df.to_csv('credentials.csv', index=False)
 
 
-if __name__ == "__main__":
-    chars = {
+chars = {
             # Lowercase letters
             'lower_case': ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
              'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
@@ -106,29 +100,13 @@ if __name__ == "__main__":
             'punctuation': ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')',
                '-', '_', '=', '+', '[', ']', '{', '}', '\\', '|', ';', ':',
                "'", '"', ',', '<', '.', '>', '/', '?']}
-    pass_man = PassMan()
-    print(f"Generate new password, Save existing credentials")
-    prompt = input("What can I do for you:\n").lower().strip()
-    if prompt == "generate new password":
-        strength = input("Password strength (1, 2, 3):\n")
-        if strength == "":
-            strength = 1
-        print(f"Generating password of strength {strength}...")
-        # time.sleep(1)
-        generated_password = pass_man._generate_password(int
-        (strength), chars)
-        print(f"Generated password: {generated_password}")
-        prompt_save_password = input("Do you want to save the generated password (y) (n): ")
-        if prompt_save_password == "y":
-            credentials_description = input("Description:\n")
-            username = input("Username: ")
-            pass_man._to_csv(credentials_description, username, generated_password)
-        elif prompt_save_password == "n":
-            print("Exiting...")
-    elif prompt == "save credentials":
-        credentials_description = input("Description:\n")
-        username = input("Username: ")
-        password = input("Password: ")
-        pass_man._to_csv(credentials_description, username, password)
-        print("Credentials saved")
+password_manager = PasswordManager()
 
+
+def password_manager():
+    ...
+
+
+if __name__ == "__main__":
+    generate_password = password_manager._generate_password(strength, chars)
+    save_credentials = password_manager._to_csv(formatted_date, formatted_time, "FNB eWallet", "(+27) 842050248", "64569")
