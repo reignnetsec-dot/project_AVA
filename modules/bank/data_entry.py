@@ -32,10 +32,14 @@ def get_description() -> str:
 
 
 def get_deposit_amount() -> float:
-    deposit_amount = input("Deposit amount: ")
-    if deposit_amount == "":
-        deposit_amount = 0.0
-    return float(deposit_amount)
+    while True:
+        val = input("Deposit amount: ").strip()
+        if val == "":
+            return 0.0
+        try:
+            return float(val)
+        except ValueError:
+            print("Invalid number. Please enter a numeric value.")
 
 
 def get_withdraw_amount() -> float:

@@ -1,6 +1,6 @@
 import pandas as pd
 import random
-from time_master import formatted_date, formatted_time
+from modules.bank.time_master import formatted_date, formatted_time
 
 
 class PasswordManager:
