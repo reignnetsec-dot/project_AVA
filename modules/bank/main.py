@@ -1,33 +1,39 @@
 import pandas as pd
+from data_entry import get_date, get_amount, get_tag, get_description, get_deposit_amount, get_withdraw_amount
+from data_handler import load_data, save_data
 
 
-class data_handler:
-    DATA_PATH: str = 'finance.csv'
-    COLUMNS = ['date', 'amount', 'tag', 'description']
+TOTAL_BALANCE_PATH = "data/total_balance.csv"
 
 
-    @classmethod
-    def load_data(cls):
-        try:
-            df = pd.read_csv(cls.DATA_PATH)
-        except FileNotFoundError:
-            df = pd.DataFrame(columns=cls.COLUMNS)
-            df.to_csv(cls.DATA_PATH, index=False)
-        return df
+class Account:
+    def __init__(self):
+        ...
+
+
+    def deposit(self):
+        deposit_amount = get_deposit_amount()
+        df = load_data(TOTAL_BALANCE_PATH)
+        new_balance = df.balance + deposit_amount
+        balance_dict = {
+            "balance": new_balance
+        }
+        new_balance_df = pd.DataFrame(balance_dict)
+        new_balance_df.to_csv(TOTAL_BALANCE_PATH, index=False)
+
+
+    def withdraw(self):
+        withdraw_amount = get_withdraw_amount()
+        df = load_data(TOTAL_BALANCE_PATH)
+        new_balance = df.balance - withdraw_amount
+        balance_dict = {
+            "balance": new_balance
+        }
+        new_balance_df = pd.DataFrame(balance_dict)
+        new_balance_df.to_csv(TOTAL_BALANCE_PATH, index=False)
+
+
+if __name__ == "__main__":
+    # prompt = input("What can I do for you?\nDeposit, Withdraw\n:").lower()
+    Account().deposit()
     
-
-    @classmethod
-    def save_data(cls, data: dict):
-        df = cls.load_data()
-        new_row = pd.DataFrame([data], columns=cls.COLUMNS)
-        df = pd.concat([df, new_row], ignore_index=True)
-        df.to_csv(cls.DATA_PATH, index=False)
-
-
-data = {
-    "date": '2026/05/30',
-    "amount": 100,
-    "tag": "income",
-    "description": 'construction-work'
-}
-data_handler.save_data(data)
