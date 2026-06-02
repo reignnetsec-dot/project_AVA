@@ -38,7 +38,7 @@ class Account:
         # balance = self._get_balance()
         new_balance = self._get_balance() + amount
         self._set_balance(new_balance)
-        print(f"Deposited {amount}. New balance: {new_balance}")
+        print(f"Deposited {amount}. New balance: {new_balance} 🤑")
 
 
     def withdraw(self, amount):
@@ -48,7 +48,7 @@ class Account:
             return
         new_balance = balance - amount
         self._set_balance(new_balance)
-        print(f"Withdrew {amount}. New balance: {new_balance}")
+        print(f"Withdrew {amount}. New balance: {new_balance} 😰")
 
 
     def log(self, tag, amount):
@@ -62,7 +62,8 @@ if __name__ == "__main__":
     print(f"Zacharia L. Gumbo\nBalance = R{Account()._get_balance():.2f}")
     print()
     
-    prompt = input("What can I do for you?\n1: Deposit, 2: Withdraw\n:").lower().strip()
+    prompt = input("What can I do for you?☺️\n1: Deposit, 2: Withdraw\n:").lower().strip()
+    print()
 
     # 1: Deposit
     if prompt == "1":
@@ -70,7 +71,6 @@ if __name__ == "__main__":
         Account().deposit(deposit_amount)
         tag = "Deposit"
         Account().log(tag, deposit_amount)
-
 
     # 2: Withdraw
     elif prompt == "2":
