@@ -11,9 +11,9 @@ def load_data(data_path: str, columns = None) -> pd.DataFrame:
     """
     # infer columns if not provided
     if columns is None:
-        if "balance" in data_path:
+        if "total_balance.csv" in data_path:
             columns = ["balance"]
-        elif "log" in data_path or "finance" in data_path:
+        elif "finance_logs.csv" in data_path:
             columns = ["date", "time", "tag", "amount"]
         else:
             # generic: just load whatever exists, or return empty

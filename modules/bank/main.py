@@ -22,16 +22,28 @@ class Account:
             pd.DataFrame({"balance": [0]}).to_csv(self.balance_path, index=False)
 
 
-    def deposit(self, amount):
-        balance = self._get_balance()
-        new_balance = balance + amount
+    def _get_balance(self) -> pd.DataFrame:
+        return load_data(TOTAL_BALANCE_PATH)["balance"].iloc[0]
+    
+
+    def _set_balance(self, balance):
+        # total_balance = self._get_balance() + balance
+        df = load_data(TOTAL_BALANCE_PATH)
+        df.loc[0, 'balance'] = balance
+        # save_data({"balance": [balance]}, TOTAL_BALANCE_PATH)
+        df.to_csv(TOTAL_BALANCE_PATH, index=False)
+
+
+    def deposit(self, amount: float):
+        # balance = self._get_balance()
+        new_balance = self._get_balance() + amount
         self._set_balance(new_balance)
         print(f"Deposited {amount}. New balance: {new_balance}")
 
 
     def withdraw(self, amount):
         balance = self._get_balance()
-        if amount > bal:
+        if amount > balance:
             print("Insufficient funds.")
             return
         new_balance = balance - amount
@@ -47,6 +59,9 @@ class Account:
 
 
 if __name__ == "__main__":
+    print(f"Zacharia L. Gumbo\nBalance = R{Account()._get_balance():.2f}")
+    print()
+    
     prompt = input("What can I do for you?\n1: Deposit, 2: Withdraw\n:").lower().strip()
 
     # 1: Deposit
