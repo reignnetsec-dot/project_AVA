@@ -23,13 +23,9 @@ class Train:
             print()
 
             # intent = input("Intent: ")
-            score: int = int(input("Eval: "))
+            evaluate: int = int(input("Eval: "))
             
-            if score == 1:
-                if 'confidence' not in df_memory.columns:
-                    df_memory['confidence'] = 0.0
-                elif 'confidence' in df_memory.columns:
-                    df_memory['confidence'] = 0.0
+            if evaluate == 1:
                 df_memory.loc[:, 'confidence']  += self.LEARNING_RATE
                 df_memory.to_csv('data/memory.csv', index=False)
 
