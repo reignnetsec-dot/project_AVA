@@ -38,7 +38,7 @@ class Account:
         # balance = self._get_balance()
         new_balance = self._get_balance() + amount
         self._set_balance(new_balance)
-        print(f"Deposited {amount}. New balance: {new_balance} 🤑")
+        print(f"Deposited R{amount}. New balance: R{new_balance} 🤑")
 
 
     def withdraw(self, amount):
@@ -48,7 +48,7 @@ class Account:
             return
         new_balance = balance - amount
         self._set_balance(new_balance)
-        print(f"Withdrew {amount}. New balance: {new_balance} 😰")
+        print(f"Withdrew R{amount}. New balance: R{new_balance} 😰")
 
 
     def log(self, tag, amount):
