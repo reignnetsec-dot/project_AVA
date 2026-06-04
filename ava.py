@@ -29,11 +29,12 @@ class Train:
                 df_memory.loc[:, 'confidence']  += self.LEARNING_RATE
                 df_memory.to_csv('data/memory.csv', index=False)
 
-            # else:
-            #     w[answer] -= 0.1
+            elif evaluate == 0:
+                df_memory.loc[:, 'confidence']  -= self.LEARNING_RATE
+                df_memory.to_csv('data/memory.csv', index=False)
 
             print()
-            print(f"Prompt -> {self.prompt}\nAnswer -> {answer}\nConfidence -> {df_memory['confidence']}")
+            print(f"Prompt -> {self.prompt}\nAnswer -> {answer}\nNew Confidence -> {df_memory['confidence']}")
             print()
 
 
