@@ -3,40 +3,42 @@ import pandas as pd
 import random
 
 
+feature = 2
+target = 10
+learning_rate = 0.08
+weight = 0.3            # change this to 6.0 to test overshoot correction
 
-class Train:
-    
 
-    def __init__(self, prompt: str):
-        self.prompt = prompt.lower().strip()
-        self.LEARNING_RATE = 0.05
+class Brain:
+    def __init__(self, feature: int, target: int, learning_rate: float, weight: float):
+        self.feature = feature
+        self.target = target
+        self.learning_rate = learning_rate
+        self.weight = weight
 
     def train(self):
-        
-        df_memory = pd.read_csv('data/memory.csv')
-
         while True:
-            ava_answer = ['hie', 'no', 'what', 'hello', 'how are you', 'who are you']
-            answer = random.choice(ava_answer)
+            # Forward pass: linear unit with bias
+            output = self.weight * self.feature + 1
+            error = self.target - output          # positive if too low, negative if too high
 
-            print(f"Prompt: {self.prompt}\nAnswer: {answer}")
-            print()
+            print(f"Feature: {self.feature}, Output: {output:.4f}, Error: {error:.4f}")
 
-            # intent = input("Intent: ")
-            evaluate: int = int(input("Eval: "))
-            
-            if evaluate == 1:
-                df_memory.loc[:, 'confidence']  += self.LEARNING_RATE
-                df_memory.to_csv('data/memory.csv', index=False)
+            # Unified update rule: move weight in direction of error,
+            # with step proportional to error magnitude
+            self.weight += self.learning_rate * error * self.feature
 
-            elif evaluate == 0:
-                df_memory.loc[:, 'confidence']  -= self.LEARNING_RATE
-                df_memory.to_csv('data/memory.csv', index=False)
+            # Recompute after update to check stopping condition on new state
+            new_output = self.weight * self.feature + 1
+            new_error = self.target - new_output
 
-            print()
-            print(f"Prompt -> {self.prompt}\nAnswer -> {answer}\nNew Confidence -> {df_memory['confidence']}")
-            print()
+            if abs(new_error) < 0.1:              # close enough
+                print(f"Converged: Output = {new_output:.4f}, Weight = {self.weight:.4f}")
+                break
+
+            print(f"Weight updated to: {self.weight:.4f}\n")
 
 
-ava = Train("hello")
+# Instantiate and train
+ava = Brain(feature, target, learning_rate, weight)
 ava.train()
