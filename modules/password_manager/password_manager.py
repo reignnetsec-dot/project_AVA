@@ -1,23 +1,27 @@
 import pandas as pd
 import random
-from modules.bank.time_master import formatted_date, formatted_time
+from ..time_master import get_current_datetime
+
+
+CREDENTIALS = '/home/reign/projects/project_AVA/modules/password_manager/data/credentials.csv'
 
 
 class PasswordManager:
-    def __init__(self):
-        pass
+    def __init__(self, strength: int = 0, chars: dict = {}):
+        self.strength = strength
+        self.chars = chars
 
     
     # generate password
-    def _generate_password(self, strength: int, chars: dict):
-        lower_case = chars['lower_case']
-        upper_case = chars['upper_case']
-        digits = chars['digits']
-        punctuation = chars['punctuation']
+    def _generate_password(self):
+        lower_case = self.chars['lower_case']
+        upper_case = self.chars['upper_case']
+        digits = self.chars['digits']
+        punctuation = self.chars['punctuation']
         all_chars = lower_case + upper_case + digits + punctuation
 
         password = []
-        if strength == 1:
+        if self.strength == 1:
             # weak password: random lowercase + digits
             for _ in range(5):
                 lower_case_char = random.choice(lower_case)
@@ -26,7 +30,7 @@ class PasswordManager:
                 digit = random.choice(digits)
                 password.append(digit)
         
-        elif strength == 2:
+        elif self.strength == 2:
             # mid password: random lowercase + uppercase + digits
             sequence = [1, 2, 3, 4]
             for _ in range(3):
@@ -43,7 +47,7 @@ class PasswordManager:
                     upper_case_char = random.choice(upper_case)
                     password.append(upper_case_char)
 
-        elif strength == 3:
+        elif self.strength == 3:
             # strong password: random lowercase + uppsercase + digits + symbols
             sequence = [1, 2, 3, 4, 5, 1, 2]
             for _ in range(3):
@@ -79,9 +83,9 @@ class PasswordManager:
             'password': password
         }
         new_row = pd.DataFrame([details_dict])
-        existing = pd.read_csv('credentials.csv')
+        existing = pd.read_csv(CREDENTIALS)
         credentials_df = pd.concat([existing, new_row], ignore_index=True)
-        credentials_df.to_csv('credentials.csv', index=False)
+        credentials_df.to_csv(CREDENTIALS, index=False)
 
 
 chars = {
@@ -100,13 +104,33 @@ chars = {
             'punctuation': ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')',
                '-', '_', '=', '+', '[', ']', '{', '}', '\\', '|', ';', ':',
                "'", '"', ',', '<', '.', '>', '/', '?']}
-password_manager = PasswordManager()
-
-
-def password_manager():
-    ...
 
 
 if __name__ == "__main__":
-    generate_password = password_manager._generate_password(strength, chars)
-    save_credentials = password_manager._to_csv(formatted_date, formatted_time, "FNB eWallet", "(+27) 842050248", "64569")
+    print("Password Manager.\n")
+    print("g = generate new password.\ns = save existing credentials.\nq = quit.\n")
+
+
+    while True:
+        prompt = input("What can I do for you.\n:\n")
+        if prompt == "g":
+            strength = int(input("Select Strength (1, 2, 3): "))
+            print("Generating new password.")
+            new_password = PasswordManager(strength, chars)._generate_password()
+            print(f"Generated Password: {new_password}")
+            """Save to credentials.csv"""
+        elif prompt == "s":
+            username = input("Input new username: ")
+            password = input("Input new password: ")
+            description = input("Description: ")
+            PasswordManager()._to_csv(get_current_datetime()['date'], get_current_datetime()['date'], description, username, password)
+            print("Credentials saved.")
+        elif prompt == "q":
+            print("Quitting...")
+            exit()
+        else:
+            print("Please enter given options.\n")
+
+
+    
+    
