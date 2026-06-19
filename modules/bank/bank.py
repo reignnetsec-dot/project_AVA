@@ -52,7 +52,7 @@ class Account:
 
 
     def log(self, tag, amount):
-        from modules.time_master import get_current_datetime
+        from modules.time_master.time_master import get_current_datetime
         dt = get_current_datetime()
         new_log = {"date": dt["date"], "time": dt["time"], "tag": tag, "amount": amount}
         save_data(new_log, FINANCE_LOGS_PATH)

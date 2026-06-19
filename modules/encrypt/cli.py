@@ -4,19 +4,21 @@ from pathlib import Path
 
 from .core import DEFAULT_STORAGE_DIR, decrypt_credentials, encrypt_credentials
 
-
-def _normalize_filename(filename: str, extension: str) -> str:
-    filename = filename.strip()
-    if not filename:
-        raise ValueError("Filename cannot be empty.")
-    return filename if filename.lower().endswith(extension) else f"{filename}{extension}"
+from ..utils.validators import normalize_filename, prompt_non_empty
 
 
-def _prompt_non_empty(prompt: str) -> str:
-    value = input(prompt).strip()
-    if not value:
-        raise ValueError("Input cannot be empty.")
-    return value
+# def _normalize_filename(filename: str, extension: str) -> str:
+#     filename = filename.strip()
+#     if not filename:
+#         raise ValueError("Filename cannot be empty.")
+#     return filename if filename.lower().endswith(extension) else f"{filename}{extension}"
+
+
+# def _prompt_non_empty(prompt: str) -> str:
+#     value = input(prompt).strip()
+#     if not value:
+#         raise ValueError("Input cannot be empty.")
+#     return value
 
 
 def run_encryptor_cli(storage_dir: Path = DEFAULT_STORAGE_DIR) -> None:
@@ -45,15 +47,15 @@ def _encrypt_flow(storage_dir: Path) -> None:
         print("At least username or password is required.")
         return
 
-    user_token_file = _normalize_filename(_prompt_non_empty("username-file| "), ".npy")
-    pass_token_file = _normalize_filename(_prompt_non_empty("password-file| "), ".npy")
-    key_file = _normalize_filename(_prompt_non_empty("key-name: "), ".enc")
+    user_token_file = normalize_filename(prompt_non_empty("username-file| "), ".npy")
+    pass_token_file = normalize_filename(prompt_non_empty("password-file| "), ".npy")
+    key_file = normalize_filename(prompt_non_empty("key-name: "), ".enc")
 
     print("----------------------------------")
     print("KEEP KEY SAFE. DO NOT SHARE ⚠️")
     print("----------------------------------\n")
 
-    master_password = _prompt_non_empty("Set master password. KEEP SAFE ⚠️ | ")
+    master_password = prompt_non_empty("Set master password. KEEP SAFE ⚠️ | ")
     if len(master_password) < 10:
         print("Master password must be at least 10 characters.")
         return
@@ -79,10 +81,10 @@ def _encrypt_flow(storage_dir: Path) -> None:
 
 
 def _decrypt_flow(storage_dir: Path) -> None:
-    user_token_file = _normalize_filename(_prompt_non_empty("Encrypted File-1: "), ".npy")
-    pass_token_file = _normalize_filename(_prompt_non_empty("Encrypted File-2: "), ".npy")
-    key_file = _normalize_filename(_prompt_non_empty("key: "), ".enc")
-    master_password = _prompt_non_empty("Master Password: ")
+    user_token_file = normalize_filename(prompt_non_empty("Encrypted File-1: "), ".npy")
+    pass_token_file = normalize_filename(prompt_non_empty("Encrypted File-2: "), ".npy")
+    key_file = normalize_filename(prompt_non_empty("key: "), ".enc")
+    master_password = prompt_non_empty("Master Password: ")
 
     username, password = decrypt_credentials(
         master_password=master_password,

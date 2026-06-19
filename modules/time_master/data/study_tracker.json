@@ -1,0 +1,12 @@
+{
+    "last_study_session": null,
+    "study_streak": 0,
+    "total_study_count": 0,
+    "study_log": [],
+    "settings": {
+      "reminder_times": ["09:00", "14:00", "19:00"],
+      "email_enabled": true,
+      "system_notification_enabled": true,
+      "email_recipient": "your_email@gmail.com"
+    }
+  }
