@@ -1,48 +1,62 @@
-# from modules.pass_manager import PassMan
-import pandas as pd
 import random
+import pandas as pd
 
 
-learning_rate = 0.08
+MEMORY = "/home/reign/projects/project_AVA/nlp_model/data/memory.csv"
+TOOLS = [
+    "password_generator",
+    "like",
+    "one",
+    "None",
+    "Liking",
+    "No like"
+]
 
-
-class Brain:
-    def __init__(self, prompt: str):
+class Train:
+    def __init__(self, prompt: str, tools: list, file_path: str):
         self.prompt = prompt
+        self.file_path = file_path
 
 
-    def type(self):
-        type = ["greet", "None", "Noon"]
-        return random.choice(type)
+    """
+    Taking guesses, evaluating and then update the memory 
+    """
+    def guess(self):
+        return(random.choice(TOOLS))
+    
+
+    def evaluate_guess(self, guess):
+        print(guess)
+
+        evaluate: int = int(input("Eval: "))
+
+        if evaluate == 1:
+            print("|Added (0.05) confidence.|")
+            print(f"Prompt -> |{self.prompt}|\nGuess -> |{guess}|")
+            return 0.05
+        elif evaluate == 0:
+            print("Not validated.")
+            return None
 
 
-    def ask_answer(self):
-        print(f"Prompt: {self.prompt}")
-        answer = input("Answer: ")
+    def update_weight(self):
+        df = pd.read_csv(self.file_path)
+        # get the added weight from evaluation (may be None if not validated)
+        delta = self.evaluate_guess(self.guess())
+        if delta is None:
+            print("No change to weights (not validated).")
+            return
+        # ensure existing weights are numeric
+        df["weight"] = pd.to_numeric(df["weight"], errors="coerce").fillna(0)
+        # increment the weight for matching prompt rows
+        mask = df["prompt"] == self.prompt
+        df.loc[mask, "weight"] = df.loc[mask, "weight"] + delta
+        df.to_csv(self.file_path, index=False)
 
-        df = pd.read_csv("data/memory.csv")
-        df.loc[0, "prompt"] = self.prompt
-        df.loc[0, "answer"] = answer
-
-        
-        while True:
-            type = self.type()
-            print(f"Type: {type}")
-            val_type = input("Validate Type: ")
-            if val_type == "y":
-                df.loc[0, "type"] = type
-                break
-            elif val_type == "n":
-                print("Lets try again.")
-            else:
-                print("Please validate type.")
+    
+    def training_flow(self):
+        self.update_weight()
 
 
-        df.loc[0, "confidence"] = learning_rate + learning_rate
-        
-        df.to_csv("data/memory.csv", index=False)
-
-
-brain = Brain("hello")
-while True:
-    brain.ask_answer()
+answer = Train("generate new password", TOOLS, MEMORY).training_flow()
+# print(f"Answer -> {answer}")
