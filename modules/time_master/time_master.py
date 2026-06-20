@@ -1,7 +1,7 @@
 from datetime import datetime
 
 
-def get_current_datetime():
+def get_datetime():
     now = datetime.now()
     return {
         "date": now.strftime("%Y/%m/%d"),
